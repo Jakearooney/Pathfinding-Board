@@ -4,7 +4,7 @@ using UnityEngine;
 using CodeMonkey.Utils;
 
 //No monobehaviour because it is a simple class.
-public class GridScript 
+public class GridScript
 {
     private int width;
     private int height;
