@@ -6,9 +6,12 @@ using CodeMonkey.Utils;
 //No monobehaviour because it is a simple class.
 public class HeatmapGridScript
 {
-    private int width;
-    private int height;
-    private float cellSize;
+    public const int heatMapMaxValue = 100;
+    public const int heatMapMinValue = 0;
+
+    public int width;
+    public int height;
+    public float cellSize;
 
     private Vector3 originPosition;
     
@@ -54,6 +57,20 @@ public class HeatmapGridScript
         Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
     }
 
+    public int GetWidth()
+    {
+        return width;
+    }
+
+    public int GetHeight()
+    {
+        return height;
+    }
+    public int GetCellSize()
+    {
+        return (int)cellSize;
+    }
+
     //Function converts the x & y used into an actual world position.
     private Vector3 GetWorldPosition(int x, int y)
     {
@@ -72,7 +89,8 @@ public class HeatmapGridScript
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
-            gridArray[x, y] = value;
+            //Mathf.Clamp clamps the value variable between the two values of heatmapmin and heatmapmax.
+            gridArray[x, y] = Mathf.Clamp(value, heatMapMinValue, heatMapMaxValue);
             debugTextArray[x, y].text = gridArray[x, y].ToString();
         }
         
@@ -104,4 +122,6 @@ public class HeatmapGridScript
         GetXY(worldPosition, out x, out y);
         return GetValue(x, y);
     }
+
+
 }

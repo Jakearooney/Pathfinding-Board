@@ -9,26 +9,26 @@ public class HeatmapTestingScript : MonoBehaviour
     public int setGridHeight;
     public float setGridCellSize;
 
+    [SerializeField] private HeatmapVisualScript heatMapVisual;
+
     private HeatmapGridScript grid;
 
     private void Start()
     {
         //Feeds the two public variables into the HeatmapGridScript script to generate a grid with the player set width and height through the scene. Also sets the grid to the center of the scene at the end.
-        grid = new HeatmapGridScript(setGridWidth, setGridHeight, setGridCellSize, new Vector3((setGridWidth / 2) * -setGridCellSize + (-setGridCellSize / 2), (setGridHeight / 2) * -setGridCellSize));
+        grid = new HeatmapGridScript(setGridWidth, setGridHeight, setGridCellSize, new Vector3(-setGridWidth * setGridCellSize / 2, -setGridHeight * setGridCellSize / 2));
+
+        heatMapVisual.SetGrid(grid);
     }
 
     private void Update()
     {
-        //Checks if the player has clicked a grid cell, if so changes the value.
         if (Input.GetMouseButtonDown(0))
         {
-            grid.SetValue(UtilsClass.GetMouseWorldPosition(), 56);
-        }
+            Vector3 position = UtilsClass.GetMouseWorldPosition();
+            int value = grid.GetValue(position);
 
-        //Checks if the player right clicked a grid cell, if so reads its value and tells the developer.
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log(grid.GetValue(UtilsClass.GetMouseWorldPosition()));
+            grid.SetValue(position, value + 5);
         }
     }
 }
