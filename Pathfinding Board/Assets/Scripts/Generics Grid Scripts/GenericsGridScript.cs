@@ -5,13 +5,13 @@ using CodeMonkey.Utils;
 using System;
 
 //No monobehaviour because it is a simple class.
-public class HeatmapGridScript
+public class GenericsGridScript<GridObject>
 {
     public const int heatMapMaxValue = 100;
     public const int heatMapMinValue = 0;
 
-    public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
-    public class OnGridValueChangedEventArgs
+    public event EventHandler<OnGridObjectChangedEventArgs> OnGridObjectChanged;
+    public class OnGridObjectChangedEventArgs
     {
         public int x;
         public int y;
@@ -25,12 +25,12 @@ public class HeatmapGridScript
     private Vector3 originPosition;
     
     //Defined Multidimensional arrays.
-    private int[,] gridArray;
+    private GridObject[,] gridArray;
 
     private TextMesh[,] debugTextArray;
 
-    //Public constuctor which recieves the width and height from another script.
-    public HeatmapGridScript(int width, int height, float cellSize, Vector3 originPosition)
+    //Public constuctor which recieves the width and height from another script. //Also creates a new grid object so that the grid array can accept different inputs without null errors.
+    public GenericsGridScript(int width, int height, float cellSize, Vector3 originPosition, Func<GenericsGridScript<GridObject>, int, int, GridObject> createGridObject) 
     {
         this.width = width;
         this.height = height;
@@ -38,8 +38,16 @@ public class HeatmapGridScript
 
         this.originPosition = originPosition;
 
-        gridArray = new int[width, height];
+        gridArray = new GridObject[width, height];
         debugTextArray = new TextMesh[width, height];
+
+        for (int x = 0; x < gridArray.GetLength(0); x++)
+        {
+            for (int y = 0; y < gridArray.GetLength(1); y++)
+            {
+                gridArray[x, y] = createGridObject(this, x, y);
+            }
+        }
 
         //Tells the developer if the correct width and height are being used for the grid.
         Debug.Log(width + " " + height);
@@ -54,7 +62,7 @@ public class HeatmapGridScript
                 Debug.Log(x + " " + y);
 
                 //Creates the world text for the grid using the "GetWorldPostition" function while cycling through the multidimensional array as well as colouring the text white and anchoring it to the middle center.
-                debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y].ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 30, Color.white, TextAnchor.MiddleCenter);
+                debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 30, Color.white, TextAnchor.MiddleCenter);
 
                 //Draws the horizontal and vertical grid lines but only in debug gizmo mode.
                 Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
@@ -65,8 +73,8 @@ public class HeatmapGridScript
         Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
         Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
 
-        OnGridValueChanged += (object sender, OnGridValueChangedEventArgs eventArgs) => {
-            debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y].ToString();
+        OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) => {
+            debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y]?.ToString();
         };
     }
 
@@ -98,14 +106,14 @@ public class HeatmapGridScript
     }
 
     //Sets the value of one of the text numbers.
-    public void SetValue(int x, int y, int value)
+    public void SetGridObject(int x, int y, GridObject value)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
             //Mathf.Clamp clamps the value variable between the two values of heatmapmin and heatmapmax.
-            gridArray[x, y] = Mathf.Clamp(value, heatMapMinValue, heatMapMaxValue);
+            gridArray[x, y] = value;
 
-            if (OnGridValueChanged != null) OnGridValueChanged(this, new OnGridValueChangedEventArgs { x = x, y = y });
+            if (OnGridObjectChanged != null) OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
 
             debugTextArray[x, y].text = gridArray[x, y].ToString();
         }
@@ -113,19 +121,22 @@ public class HeatmapGridScript
     }
 
     //Checks the value of a grid cell, if it hasn't been changed yet changes it.
-    public void SetValue(Vector3 worldPosition, int value)
+    public void SetGridObject(Vector3 worldPosition, GridObject value)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
-        SetValue(x, y, value);
+        SetGridObject(x, y, value);
     }
 
-    public void AddValue(int x, int y, int value)
+    public void TriggerGridObjectChanged(int x, int y)
     {
-        SetValue(x, y, GetValue(x, y) + value);
+        if (OnGridObjectChanged != null)
+        {
+            OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
+        }
     }
 
-    public int GetValue(int x, int y)
+    public GridObject GetGridObject(int x, int y)
     {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
@@ -133,50 +144,17 @@ public class HeatmapGridScript
         }
         else
         {
-            return 0;
+            return default(GridObject);
         }
     }
 
-    public int GetValue(Vector3 worldPosition)
+    public GridObject GetGridObject(Vector3 worldPosition)
     {
         int x, y;
         GetXY(worldPosition, out x, out y);
-        return GetValue(x, y);
+        return GetGridObject(x, y);
     }
 
-    public void AddValue(Vector3 worldPosition, int value, int fullValueRange, int totalRange)
-    {
-        int lowerValueAmount = Mathf.RoundToInt((float)value / (totalRange - fullValueRange));
-
-        //Creates the heatmap on click.
-        GetXY(worldPosition, out int originX, out int originY);
-        for (int x = 0; x < totalRange; x++)
-        {
-            for (int y = 0; y < totalRange - x; y++)//Creates the diamond shaped heatmap.
-            {
-                int radius = x + y;
-                int addValueAmount = value;
-                if (radius > fullValueRange)
-                {
-                    addValueAmount -= lowerValueAmount * (radius - fullValueRange);
-                }
-                AddValue(originX + x, originY + y, addValueAmount);
-
-                if (x != 0)
-                {
-                    AddValue(originX - x, originY + y, addValueAmount);
-                }
-                if (y != 0)
-                {
-                    AddValue(originX + x, originY - y, addValueAmount);
-                    if (x != 0)
-                    {
-                        AddValue(originX - x, originY - y, addValueAmount);
-                    }
-                }
-
-            }
-        }
-    }
+    
 
 }

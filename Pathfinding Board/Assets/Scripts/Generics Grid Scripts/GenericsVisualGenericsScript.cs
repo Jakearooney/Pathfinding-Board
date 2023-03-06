@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class HeatmapVisualScript : MonoBehaviour
+public class GenericsVisualGenericsScript : MonoBehaviour
 {
-    private HeatmapGridScript grid;
+    private GenericsGridScript<GenericsTestingScript.HeatMapGridObject> grid;
     private Mesh mesh;
     private bool updateMesh;
 
@@ -16,15 +16,15 @@ public class HeatmapVisualScript : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    public void SetGrid(HeatmapGridScript grid)
+    public void SetGrid(GenericsGridScript<GenericsTestingScript.HeatMapGridObject> grid)
     {
         this.grid = grid;
         UpdateHeatMapVisual();
 
-        grid.OnGridValueChanged += HeatmapGridScript_OnGridValueChanged;
+        grid.OnGridObjectChanged += GenericsGridScript_OnGridObjectChanged;
     }
 
-    private void HeatmapGridScript_OnGridValueChanged(object sender, HeatmapGridScript.OnGridValueChangedEventArgs e)
+    private void GenericsGridScript_OnGridObjectChanged(object sender, GenericsGridScript<GenericsTestingScript.HeatMapGridObject>.OnGridObjectChangedEventArgs e)
     {
         //UpdateHeatMapVisual();
         updateMesh = true;
@@ -44,7 +44,7 @@ public class HeatmapVisualScript : MonoBehaviour
     private void UpdateHeatMapVisual()
     {
         //Creating the empyt mesh array then cycling through each grid position to update it correctly.
-        HeatmapMeshUtilsScript.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
+        GenericsMeshUtilsScript.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
 
         for (int x = 0; x < grid.GetWidth(); x++)
         {
@@ -53,11 +53,11 @@ public class HeatmapVisualScript : MonoBehaviour
                 int index = x * grid.GetHeight() + y;
                 Vector3 quadSize = new Vector3(1, 1) * grid.GetCellSize();
 
-                int gridValue = grid.GetValue(x, y);
-                float gridValueNormalized = (float)gridValue / HeatmapGridScript.heatMapMaxValue;
+                GenericsTestingScript.HeatMapGridObject gridObject = grid.GetGridObject(x, y);
+                float gridValueNormalized = gridObject.GetValueNormalized();
                 Vector2 gridValueUV = new Vector2(gridValueNormalized, 0f);
 
-                HeatmapMeshUtilsScript.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * .5f, 0f, quadSize, gridValueUV, gridValueUV);
+                GenericsMeshUtilsScript.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * .5f, 0f, quadSize, gridValueUV, gridValueUV);
             }
         }
 

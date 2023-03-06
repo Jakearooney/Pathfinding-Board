@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
+using System;
 
 public class HeatmapTestingScript : MonoBehaviour
 {
@@ -26,9 +27,7 @@ public class HeatmapTestingScript : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 position = UtilsClass.GetMouseWorldPosition();
-            int value = grid.GetValue(position);
-
-            grid.SetValue(position, value + 5);
+            grid.AddValue(position, 100, 5, 40);
         }
     }
 }
