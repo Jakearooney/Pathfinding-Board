@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GenericsVisualGenericsScript : MonoBehaviour
+public class PathfindingHeatmapBoolVisualScript : MonoBehaviour
 {
-    private GenericsGridScript<GenericsTestingScript.HeatMapGridObject> grid;
+    private PathfindingGridScript<bool> grid;
     private Mesh mesh;
     private bool updateMesh;
 
@@ -16,15 +16,15 @@ public class GenericsVisualGenericsScript : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    public void SetGrid(GenericsGridScript<GenericsTestingScript.HeatMapGridObject> grid)
+    public void SetGrid(PathfindingGridScript<bool> grid)
     {
         this.grid = grid;
         UpdateHeatMapVisual();
 
-        grid.OnGridObjectChanged += GenericsGridScript_OnGridObjectChanged;
+        grid.OnGridObjectChanged += PathfindingGridScript_OnGridObjectChanged;
     }
 
-    private void GenericsGridScript_OnGridObjectChanged(object sender, GenericsGridScript<GenericsTestingScript.HeatMapGridObject>.OnGridObjectChangedEventArgs e)
+    private void PathfindingGridScript_OnGridObjectChanged(object sender, PathfindingGridScript<bool>.OnGridObjectChangedEventArgs e)
     {
         //UpdateHeatMapVisual();
         updateMesh = true;
@@ -44,7 +44,7 @@ public class GenericsVisualGenericsScript : MonoBehaviour
     private void UpdateHeatMapVisual()
     {
         //Creating the empyt mesh array then cycling through each grid position to update it correctly.
-        GenericsMeshUtilsScript.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
+        PathfindingMeshUtilsScript.CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out int[] triangles);
 
         for (int x = 0; x < grid.GetWidth(); x++)
         {
@@ -53,11 +53,11 @@ public class GenericsVisualGenericsScript : MonoBehaviour
                 int index = x * grid.GetHeight() + y;
                 Vector3 quadSize = new Vector3(1, 1) * grid.GetCellSize();
 
-                GenericsTestingScript.HeatMapGridObject gridObject = grid.GetGridObject(x, y);
-                float gridValueNormalized = gridObject.GetValueNormalized();
+                bool gridValue = grid.GetGridObject(x, y);
+                float gridValueNormalized = gridValue ? 1f: 0f;
                 Vector2 gridValueUV = new Vector2(gridValueNormalized, 0f);
 
-                GenericsMeshUtilsScript.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * .5f, 0f, quadSize, gridValueUV, gridValueUV);
+                PathfindingMeshUtilsScript.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * .5f, 0f, quadSize, gridValueUV, gridValueUV);
             }
         }
 

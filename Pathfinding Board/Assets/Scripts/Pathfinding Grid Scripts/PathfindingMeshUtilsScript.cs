@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GenericsMeshUtilsScript {
+public static class PathfindingMeshUtilsScript
+{
     
     private static readonly Vector3 Vector3zero = Vector3.zero;
     private static readonly Vector3 Vector3one = Vector3.one;

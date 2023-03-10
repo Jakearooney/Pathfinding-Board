@@ -5,7 +5,7 @@ using CodeMonkey.Utils;
 using System;
 
 //No monobehaviour because it is a simple class.
-public class GenericsGridScript<GridObject>
+public class PathfindingGridScript<GridObject>
 {
     public const int heatMapMaxValue = 100;
     public const int heatMapMinValue = 0;
@@ -30,7 +30,7 @@ public class GenericsGridScript<GridObject>
     private TextMesh[,] debugTextArray;
 
     //Public constuctor which recieves the width and height from another script.
-    public GenericsGridScript(int width, int height, float cellSize, Vector3 originPosition, Func<GenericsGridScript<GridObject>, int, int, GridObject> createGridObject)
+    public PathfindingGridScript(int width, int height, float cellSize, Vector3 originPosition, Func<PathfindingGridScript<GridObject>, int, int, GridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
@@ -100,7 +100,7 @@ public class GenericsGridScript<GridObject>
     }
 
     //Converts the world position into the grid position.
-    private void GetXY(Vector3 worldPositon, out int x, out int y)
+    public void GetXY(Vector3 worldPositon, out int x, out int y)
     {
         x = Mathf.FloorToInt((worldPositon - originPosition).x / cellSize);
         y = Mathf.FloorToInt((worldPositon - originPosition).y / cellSize);

@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &61130078
 Transform:
   m_ObjectHideFlags: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 61130077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ff2969e85254d242b1ce288ec76544a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a1249dc8144c7346b1825300005bbb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &174457558
@@ -235,7 +235,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &174457560
 Transform:
   m_ObjectHideFlags: 0
@@ -260,14 +260,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 174457558}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9df8288a7a859e4c9090d79f43f7cf4, type: 3}
+  m_Script: {fileID: 11500000, guid: fbd6bcedd53d3bd429a8ebf95496dcb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setGridWidth: 20
-  setGridHeight: 10
-  setGridCellSize: 12
-  heatMapVisual: {fileID: 1688281263}
-  heatMapBoolVisual: {fileID: 253402596}
+  setGridWidth: 10
+  setGridHeight: 5
+  setGridCellSize: 10
+  heatMapVisual: {fileID: 1688281264}
+  heatMapBoolVisual: {fileID: 253402597}
   heatMapGenericsVisual: {fileID: 61130081}
 --- !u!1 &253402592
 GameObject:
@@ -281,13 +281,14 @@ GameObject:
   - component: {fileID: 253402596}
   - component: {fileID: 253402595}
   - component: {fileID: 253402594}
+  - component: {fileID: 253402597}
   m_Layer: 0
   m_Name: Boolean Visual Game Object
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &253402593
 Transform:
   m_ObjectHideFlags: 0
@@ -365,6 +366,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faf8c0c30ecd11946a246960dd45e93b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &253402597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 253402592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19009c41bd1c1224f8c4c99aacb15738, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,6 +389,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -418,7 +432,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 43.499973
+  orthographic size: 71.7386
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -442,13 +456,27 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -13.1}
+  m_LocalPosition: {x: 0, y: 0, z: -73.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 685008896}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 712bef3794fd3e344a026d3b7fbe6c45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pathfindTest: {fileID: 1805530304}
+  mainCamera: {fileID: 519420028}
 --- !u!1 &685008895
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,6 +510,7 @@ Transform:
   - {fileID: 1688281259}
   - {fileID: 253402593}
   - {fileID: 61130078}
+  - {fileID: 1805530303}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -497,6 +526,7 @@ GameObject:
   - component: {fileID: 1688281263}
   - component: {fileID: 1688281262}
   - component: {fileID: 1688281261}
+  - component: {fileID: 1688281264}
   m_Layer: 0
   m_Name: Heatmap Visual Game Object
   m_TagString: Untagged
@@ -581,3 +611,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4b17cf71111e8e4e9173b927a674862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1688281264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688281258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d06b0c9a71f1247b928f3874eceec6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1805530302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1805530303}
+  - component: {fileID: 1805530304}
+  m_Layer: 0
+  m_Name: Pathfinding Testing Game Object
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1805530303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805530302}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 13.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 685008896}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1805530304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805530302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4673d98e9823e684e86f5f853906294f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setGridWidth: 20
+  setGridHeight: 10

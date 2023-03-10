@@ -4,26 +4,26 @@ using UnityEngine;
 using CodeMonkey.Utils;
 using System;
 
-public class GenericsTestingScript : MonoBehaviour
+public class PathfindingTestingScript : MonoBehaviour
 {
     public int setGridWidth;
     public int setGridHeight;
     public float setGridCellSize;
 
-    [SerializeField] private GenericsHeatmapVisualScript heatMapVisual;
+    [SerializeField] private PathfindingHeatmapVisualScript heatMapVisual;
 
-    [SerializeField] private GenericsHeatmapBoolVisualScript heatMapBoolVisual;
+    [SerializeField] private PathfindingHeatmapBoolVisualScript heatMapBoolVisual;
 
-    [SerializeField] private GenericsHeatmapGenericsVisualScript heatMapGenericsVisual;
+    [SerializeField] private PathfindingHeatmapGenericsVisualScript heatMapGenericsVisual;
 
-    private GenericsGridScript<HeatMapGridObject> grid;
+    private PathfindingGridScript<PathfindingHeatMapGridObject> grid;
 
     
 
     private void Start()
     {
         //Feeds the two public variables into the GenericsGridScript script to generate a grid with the player set width and height through the scene. Also sets the grid to the center of the scene at the end.
-        grid = new GenericsGridScript<HeatMapGridObject>(setGridWidth, setGridHeight, setGridCellSize, new Vector3(-setGridWidth * setGridCellSize / 2, -setGridHeight * setGridCellSize / 2), (GenericsGridScript<HeatMapGridObject> g, int x, int y) => new HeatMapGridObject(g, x, y));
+        grid = new PathfindingGridScript<PathfindingHeatMapGridObject>(setGridWidth, setGridHeight, setGridCellSize, new Vector3(-setGridWidth * setGridCellSize / 2, -setGridHeight * setGridCellSize / 2), (PathfindingGridScript<PathfindingHeatMapGridObject> g, int x, int y) => new PathfindingHeatMapGridObject(g, x, y));
         heatMapGenericsVisual.SetGrid(grid);
 
         //heatMapVisual.SetGrid(grid);
@@ -36,11 +36,11 @@ public class GenericsTestingScript : MonoBehaviour
         {
             Vector3 position = UtilsClass.GetMouseWorldPosition();
 
-            HeatMapGridObject heatMapGridObject = grid.GetGridObject(position);
+            PathfindingHeatMapGridObject pathfindingHeatMapGridObject = grid.GetGridObject(position);
 
-            if (heatMapGridObject != null)
+            if (pathfindingHeatMapGridObject != null)
             {
-                heatMapGridObject.addValue(5);
+                pathfindingHeatMapGridObject.addValue(5);
             }
 
             //grid.AddValue(position, 100, 2, 25);
@@ -49,18 +49,18 @@ public class GenericsTestingScript : MonoBehaviour
     }
 }
 
-public class HeatMapGridObject
+public class PathfindingHeatMapGridObject
 {
     private const int min = 0;
     private const int max = 100;
 
-    private GenericsGridScript<HeatMapGridObject> grid;
+    private PathfindingGridScript<PathfindingHeatMapGridObject> grid;
 
     private int x;
     private int y;
     private int value;
 
-    public HeatMapGridObject(GenericsGridScript<HeatMapGridObject> grid, int x, int y)
+    public PathfindingHeatMapGridObject(PathfindingGridScript<PathfindingHeatMapGridObject> grid, int x, int y)
     {
         this.grid = grid;
         this.x = x;

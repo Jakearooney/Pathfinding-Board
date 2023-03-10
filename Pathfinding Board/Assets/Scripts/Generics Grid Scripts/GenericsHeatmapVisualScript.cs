@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class GenericsVisualScript : MonoBehaviour
+public class GenericsHeatmapVisualScript : MonoBehaviour
 {
-    private GenericsGridScript<bool> grid;
+    private GenericsGridScript<int> grid;
     private Mesh mesh;
     private bool updateMesh;
 
@@ -16,7 +16,7 @@ public class GenericsVisualScript : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
     }
 
-    public void SetGrid(GenericsGridScript<bool> grid)
+    public void SetGrid(GenericsGridScript<int> grid)
     {
         this.grid = grid;
         UpdateHeatMapVisual();
@@ -24,7 +24,7 @@ public class GenericsVisualScript : MonoBehaviour
         grid.OnGridObjectChanged += GenericsGridScript_OnGridObjectChanged;
     }
 
-    private void GenericsGridScript_OnGridObjectChanged(object sender, GenericsGridScript<bool>.OnGridObjectChangedEventArgs e)
+    private void GenericsGridScript_OnGridObjectChanged(object sender, GenericsGridScript<int>.OnGridObjectChangedEventArgs e)
     {
         //UpdateHeatMapVisual();
         updateMesh = true;
@@ -53,8 +53,8 @@ public class GenericsVisualScript : MonoBehaviour
                 int index = x * grid.GetHeight() + y;
                 Vector3 quadSize = new Vector3(1, 1) * grid.GetCellSize();
 
-                bool gridValue = grid.GetGridObject(x, y);
-                float gridValueNormalized = gridValue ? 1f : 0f;
+                int gridValue = grid.GetGridObject(x, y);
+                float gridValueNormalized = (float)gridValue / GenericsGridScript<int>.heatMapMaxValue;
                 Vector2 gridValueUV = new Vector2(gridValueNormalized, 0f);
 
                 GenericsMeshUtilsScript.AddToMeshArrays(vertices, uv, triangles, index, grid.GetWorldPosition(x, y) + quadSize * .5f, 0f, quadSize, gridValueUV, gridValueUV);
