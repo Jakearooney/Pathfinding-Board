@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Pathfinding Grid Setup.unity
+    guid: 494221152c3fc89419f9345f743da54b
+  - enabled: 1
     path: Assets/Scenes/Heatmap Grid Setup.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Generics Grid Setup.unity
+    guid: f384448feb1b6684f9dac4ff6c2cc342
+  - enabled: 1
+    path: Assets/Scenes/Basic Grid Setup 1.unity
+    guid: 3dcac8e653042184998e203fc4c9f1f5
   m_configObjects: {}

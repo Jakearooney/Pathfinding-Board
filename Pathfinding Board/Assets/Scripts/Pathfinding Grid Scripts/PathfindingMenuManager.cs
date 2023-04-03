@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.SceneManagement;
 
-public class MenuManager : MonoBehaviour
+public class PathfindingMenuManager : MonoBehaviour
 {
     [SerializeField] private PathfindingTesterScript pathfindTest;
 
@@ -16,32 +17,32 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject pathfindBoard;
     [SerializeField] private GameObject mainMenu;
 
+    [SerializeField] private int currentScene;
+
     private void Start()
     {
-        UpdateText();
+        PathfindUpdateText();
     }
 
-    public void ChangeHeight(int value)
+    public void PathfindTestChangeHeight(int value)
     {
-        if (value == +1 && pathfindTest.setGridHeight < 14 || value == -1 && pathfindTest.setGridHeight > 1)
+        if (value == +1 && pathfindTest.setGridHeight < 12 || value == -1 && pathfindTest.setGridHeight > 1)
         {
             pathfindTest.setGridHeight += value;
-            UpdateText();
+            PathfindUpdateText();
         }
-        
     }
 
-    public void ChangeWidth(int value)
+    public void PathfindTestChangeWidth(int value)
     {
-        if (value == +1 && pathfindTest.setGridWidth < 25 || value == -1 && pathfindTest.setGridWidth > 1)
+        if (value == +1 && pathfindTest.setGridWidth < 24 || value == -1 && pathfindTest.setGridWidth > 1)
         {
             pathfindTest.setGridWidth += value;
-            UpdateText();
+            PathfindUpdateText();
         }
-        
     }
 
-    private void UpdateText()
+    private void PathfindUpdateText()
     {
         heightText.text = pathfindTest.setGridHeight.ToString();
         widthText.text = pathfindTest.setGridWidth.ToString();
@@ -52,5 +53,27 @@ public class MenuManager : MonoBehaviour
         pathfindBoard.active = true;
         mainMenu.active = false;
         mainCamera.transform.position = new Vector3(pathfindTest.setGridWidth * 10 / 2, pathfindTest.setGridHeight * 10 / 2, -50);
+    }
+
+    public void PreviousScene()
+    {
+        currentScene += 1;
+        SceneManager.LoadScene(currentScene);
+    }
+
+    public void NextScene()
+    {
+        currentScene -= 1;
+        SceneManager.LoadScene(currentScene);
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ExitBuild()
+    {
+        Application.Quit();
     }
 }

@@ -23,7 +23,7 @@ public class GenericsTestingScript : MonoBehaviour
     private void Start()
     {
         //Feeds the two public variables into the GenericsGridScript script to generate a grid with the player set width and height through the scene. Also sets the grid to the center of the scene at the end.
-        grid = new GenericsGridScript<HeatMapGridObject>(setGridWidth, setGridHeight, setGridCellSize, new Vector3(-setGridWidth * setGridCellSize / 2, -setGridHeight * setGridCellSize / 2), (GenericsGridScript<HeatMapGridObject> g, int x, int y) => new HeatMapGridObject(g, x, y));
+        grid = new GenericsGridScript<HeatMapGridObject>(setGridWidth, setGridHeight, setGridCellSize, new Vector3(0, 0), (GenericsGridScript<HeatMapGridObject> g, int x, int y) => new HeatMapGridObject(g, x, y));
         heatMapGenericsVisual.SetGrid(grid);
 
         //heatMapVisual.SetGrid(grid);
