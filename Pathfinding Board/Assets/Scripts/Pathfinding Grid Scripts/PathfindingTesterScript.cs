@@ -12,6 +12,9 @@ public class PathfindingTesterScript : MonoBehaviour
     private int clickedXCoord = 0;
     private int clickedYCoord = 0;
 
+    [SerializeField] private LineRenderer lineRendererPrefab;
+    private List<LineRenderer> lineRenderers = new List<LineRenderer>();
+
     private PathfindingScript pathfinding;
 
     private void Start()
@@ -28,21 +31,35 @@ public class PathfindingTesterScript : MonoBehaviour
             List<PathnodeScript> path = pathfinding.FindPath(clickedXCoord, clickedYCoord, x, y);
             if (path != null)
             {
-                for (int i=0; i<path.Count - 1; i++)
+                if (lineRenderers.Count >= 2)
                 {
-                    Debug.DrawLine(new Vector3(path[i].x, path[i].y) * 10f + Vector3.one * 5f, new Vector3(path[i + 1].x, path[i + 1].y) * 10f + Vector3.one * 5f, Color.black, 5f);
+                    Destroy(lineRenderers[0].gameObject);
+                    lineRenderers.RemoveAt(0);
                 }
+
+                LineRenderer lineRenderer = Instantiate(lineRendererPrefab);
+                lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                lineRenderer.startColor = Color.black;
+                lineRenderer.endColor = Color.black;
+                lineRenderer.startWidth = 0.5f;
+                lineRenderer.endWidth = 0.5f;
+
+                Vector3[] positions = new Vector3[path.Count + 1];
+                for (int i = 0; i < path.Count; i++)
+                {
+                    positions[i] = new Vector3(path[i].x, path[i].y) * 10f + Vector3.one * 5f;
+                }
+                positions[path.Count] = mouseWorldPosition;
+
+                lineRenderer.positionCount = positions.Length;
+                lineRenderer.SetPositions(positions);
+
+                lineRenderers.Add(lineRenderer);
+
                 clickedXCoord = x;
                 clickedYCoord = y;
             }
         }
-        /*else if (Input.GetMouseButtonDown(1))
-        {
-            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
-            pathfinding.GetGrid().GetXY(mouseWorldPosition, out int x, out int y);
-            clickedXCoord = x;
-            clickedYCoord = y;
-        }*/
     }
 
 
